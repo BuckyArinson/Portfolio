@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhammad Bakhtiar — Creative Multimedia Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Share Tech Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                        tactical: ['"Share Tech Mono"', 'monospace'],
+                    },
+                    colors: {
+                        tactical: {
+                            bg: '#101216',
+                            panel: '#191c24',
+                            border: '#323946',
+                            accent: '#ff6600',
+                            accentHover: '#e55c00',
+                            dim: '#7c8698'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 0.04em;
+        }
+        body.loaded {
+            opacity: 1;
+        }
+
+        /* Subtle monitor grain overlay for faded CRT vibe */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(16, 18, 22, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+            z-index: 999;
+            background-size: 100% 4px;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #101216; }
+        ::-webkit-scrollbar-thumb { background: #323946; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff6600; }
+
+        .hud-box {
+            position: relative;
+            background: #191c24;
+            border: 1px solid #323946;
+            transition: border-color 0.3s ease;
+        }
+        .hud-box:hover {
+            border-color: #ff6600;
+        }
+        .hud-box::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px;
+            width: 8px; height: 8px;
+            border-top: 2px solid #ff6600;
+            border-left: 2px solid #ff6600;
+            pointer-events: none;
+        }
+        .hud-box::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; right: -1px;
+            width: 8px; height: 8px;
+            border-bottom: 2px solid #ff6600;
+            border-right: 2px solid #ff6600;
+            pointer-events: none;
+        }
+
+        .modal-backdrop {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s linear;
+        }
+        .modal-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-container {
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-backdrop.active .modal-container {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="bg-tactical-bg text-slate-300 antialiased min-h-screen flex flex-col justify-between selection:bg-tactical-accent selection:text-black font-mono">
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#14171f]/95 backdrop-blur-md border-b border-tactical-border">
+        <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between text-xs tracking-wider">
+            <div class="flex items-center gap-3">
+                <span class="w-2.5 h-2.5 bg-tactical-accent animate-pulse rounded-full"></span>
+                <span class="text-white font-bold tracking-widest">MUHAMMAD BAKHTIAR <span class="text-tactical-dim font-normal">/ PORTFOLIO</span></span>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-tactical-dim text-xs">
+                <a href="#profile" class="hover:text-tactical-accent transition-colors">01 // PROFILE</a>
+                <a href="#records" class="hover:text-tactical-accent transition-colors">02 // RECORDS</a>
+                <a href="#experience" class="hover:text-tactical-accent transition-colors">03 // EXPERIENCE</a>
+                <a href="#projects" class="hover:text-tactical-accent transition-colors">04 // PROJECTS</a>
+                <a href="#contact" class="hover:text-tactical-accent transition-colors">05 // CONTACT</a>
+            </nav>
+
+            <div class="text-tactical-accent font-bold px-2.5 py-1 bg-tactical-accent/10 border border-tactical-accent/30 text-[11px]">
+                INTERN APPLICANT
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-24 pb-16 max-w-6xl mx-auto px-6 w-full space-y-16 relative z-10">
+        
+        <!-- Profile / Hero Section -->
+        <section id="profile" class="hud-box p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left: Profile Image & Status -->
+            <div class="lg:col-span-4 space-y-4">
+                <div onclick="openPhotoModal()" class="relative aspect-[4/5] bg-[#0d0f14] border border-tactical-border overflow-hidden rounded-lg group cursor-pointer" title="Click to view full photo">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800" alt="Muhammad Bakhtiar" class="w-full h-full object-cover filter grayscale contrast-110 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#101216] via-transparent to-transparent"></div>
+                    
+                    <div class="absolute top-3 left-3 text-xs bg-[#101216]/90 px-2 py-0.5 border border-tactical-border text-tactical-accent tracking-wider">
+                        [ID: CRM24070564]
+                    </div>
+                    <div class="absolute bottom-3 right-3 bg-[#101216]/90 px-2 py-1 border border-tactical-border text-[10px] text-white flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i class="fa-solid fa-expand"></i> EXPAND
+                    </div>
+                </div>
+
+                <div class="p-4 bg-tactical-panel border border-tactical-border text-xs space-y-2">
+                    <div class="flex justify-between items-center"><span class="text-tactical-dim">STATUS:</span><span class="text-emerald-400 font-bold">AVAILABLE FOR INTERNSHIP</span></div>
+                    <div class="border-t border-tactical-border/50 pt-2 space-y-1.5">
+                        <div class="flex justify-between"><span class="text-tactical-dim">D.O.B:</span><span class="text-white">14 NOVEMBER</span></div>
+                        <div class="flex justify-between"><span class="text-tactical-dim">NATIONALITY:</span><span class="text-white">MALAYSIAN</span></div>
+                        <div class="flex justify-between"><span class="text-tactical-dim">LOCATION:</span><span class="text-white">SELANGOR, MALAYSIA</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Bio & Key Metrics -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="border-b border-tactical-border pb-4">
+                    <span class="text-xs text-tactical-accent tracking-widest">[CREATIVE MULTIMEDIA STUDENT]</span>
+                    <h1 class="text-3xl sm:text-5xl font-bold text-white tracking-wider mt-1">
+                        Muhammad Bakhtiar <span class="text-tactical-dim font-normal text-xl block sm:inline">Bin Mohd Zamrin</span>
+                    </h1>
+                </div>
+
+                <div class="space-y-4 text-sm sm:text-base text-slate-300 leading-relaxed tracking-wide">
+                    <p>
+                        A dedicated Diploma in Creative Multimedia student at the <b>German-Malaysian Institute</b> with a strong foundation in digital video and audio production, professional photography, graphic design, animation, and interactive web standards.
+                    </p>
+                    <p class="text-xs sm:text-sm text-tactical-accent">
+                        Actively seeking a <b>Creative Multimedia Internship Role</b> where I can contribute my technical editing, storytelling, and design skills to dynamic media projects.
+                    </p>
+                </div>
+
+                <!-- Expanded Institution & Bio Data Box -->
+                <div class="p-4 bg-[#101216] border border-tactical-border space-y-2 text-xs">
+                    <div class="text-tactical-accent font-bold uppercase tracking-wider">[INSTITUTIONAL RECORD]</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
+                        <div><b>University/Institution:</b> German-Malaysian Institute</div>
+                        <div><b>Department:</b> Computer & Information Dept</div>
+                        <div><b>Program:</b> Diploma in Creative Multimedia</div>
+                        <div><b>Specialization:</b> Video, Photo & Web Dev</div>
+                    </div>
+                </div>
+
+                <!-- Attributes Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                    <div class="p-3.5 bg-tactical-panel border border-tactical-border">
+                        <span class="text-xs text-tactical-dim block">CUMULATIVE CGPA</span>
+                        <span class="text-xl font-bold text-white">3.33 <span class="text-xs font-normal text-tactical-accent">/ 4.00</span></span>
+                    </div>
+                    <div class="p-3.5 bg-tactical-panel border border-tactical-border">
+                        <span class="text-xs text-tactical-dim block">MUET ASSESSMENT</span>
+                        <span class="text-xl font-bold text-white">BAND 4.5</span>
+                    </div>
+                    <div class="p-3.5 bg-tactical-panel border border-tactical-border col-span-2 sm:col-span-1">
+                        <span class="text-xs text-tactical-dim block">PRIMARY GEAR</span>
+                        <span class="text-sm font-bold text-white">SONY A7 MARK III</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex flex-wrap gap-3">
+                    <a href="#records" class="px-5 py-2.5 bg-tactical-accent text-black font-bold text-xs tracking-wider hover:bg-tactical-accentHover transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap"></i> VIEW ACADEMIC RECORDS
+                    </a>
+                    <a href="#contact" class="px-5 py-2.5 bg-tactical-panel border border-tactical-border text-slate-300 hover:text-white hover:border-tactical-accent text-xs tracking-wider transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-envelope"></i> GET IN TOUCH
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic & Official Records Section -->
+        <section id="records" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-tactical-border pb-3 gap-2">
+                <h2 class="text-xs font-bold text-tactical-accent tracking-widest">[02 // OFFICIAL ACADEMIC & TEST RECORDS]</h2>
+                <span class="text-xs text-tactical-dim">CLICK ANY CARD TO VIEW COMPLETE TRANSCRIPT BREAKDOWN</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- SPM Record -->
+                <div onclick="openModal('spm')" class="hud-box p-6 cursor-pointer hover:border-tactical-accent transition-all group flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3 text-xs text-tactical-dim">
+                            <span>[CERTIFICATE: SPM]</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-tactical-accent"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white group-hover:text-tactical-accent transition-colors">SPM Results Breakdown</h3>
+                        <p class="text-xs text-slate-400 mt-2">[ 2A, 3B, 1C, 1D, 1E, 1F ]</p>
+                    </div>
+                    <div class="mt-8 pt-3 border-t border-tactical-border text-xs text-tactical-dim flex justify-between items-center">
+                        <span>Sijil Pelajaran Malaysia</span>
+                        <span class="text-tactical-accent font-bold">VIEW &rarr;</span>
+                    </div>
+                </div>
+
+                <!-- CGPA Record -->
+                <div onclick="openModal('cgpa')" class="hud-box p-6 cursor-pointer hover:border-tactical-accent transition-all group flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3 text-xs text-tactical-dim">
+                            <span>[DIPLOMA TRANSCRIPT]</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-tactical-accent"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white group-hover:text-tactical-accent transition-colors">Diploma CGPA & Subjects</h3>
+                        <p class="text-xs text-slate-400 mt-2">Cumulative CGPA: <b class="text-white">3.33 / 4.00</b> (Sem 1 to Sem 4)</p>
+                    </div>
+                    <div class="mt-8 pt-3 border-t border-tactical-border text-xs text-tactical-dim flex justify-between items-center">
+                        <span>All Semester Subjects</span>
+                        <span class="text-tactical-accent font-bold">VIEW &rarr;</span>
+                    </div>
+                </div>
+
+                <!-- MUET Record -->
+                <div onclick="openModal('muet')" class="hud-box p-6 cursor-pointer hover:border-tactical-accent transition-all group flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3 text-xs text-tactical-dim">
+                            <span>[ENGLISH ASSESSMENT]</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-tactical-accent"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white group-hover:text-tactical-accent transition-colors">MUET Assessment Score</h3>
+                        <p class="text-xs text-slate-400 mt-2">Band Score: <b class="text-white">Band 4.5</b> (Score: 258/360)</p>
+                    </div>
+                    <div class="mt-8 pt-3 border-t border-tactical-border text-xs text-tactical-dim flex justify-between items-center">
+                        <span>Listening, Reading, Writing</span>
+                        <span class="text-tactical-accent font-bold">VIEW &rarr;</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic Journey & Experience Section -->
+        <section id="experience" class="space-y-6">
+            <div class="border-b border-tactical-border pb-3">
+                <h2 class="text-xs font-bold text-tactical-accent tracking-widest">[03 // EDUCATION & ACADEMIC EXPERIENCE]</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Education Card -->
+                <div class="hud-box p-6 space-y-3">
+                    <div class="flex items-center justify-between text-xs text-tactical-dim">
+                        <span>JULY 2024 — PRESENT</span>
+                        <span class="text-tactical-accent">ACTIVE STUDENT</span>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Diploma in Creative Multimedia</h3>
+                    <p class="text-xs text-tactical-dim">German-Malaysian Institute (GMI) • ID: CRM24070564</p>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed pt-2">
+                        Pursuing advanced multimedia coursework under the Computer & Information Department. Gaining hands-on expertise in industry-standard software, video production pipelines, and design methodologies.
+                    </p>
+                </div>
+
+                <!-- Experience Card -->
+                <div class="hud-box p-6 space-y-3">
+                    <div class="flex items-center justify-between text-xs text-tactical-dim">
+                        <span>ACADEMIC & FREELANCE</span>
+                        <span class="text-tactical-accent">PROJECT LEAD</span>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Multimedia Project Lead & Photographer</h3>
+                    <p class="text-xs text-tactical-dim">GMI Department Productions & Shuttermacht™</p>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed pt-2">
+                        Directed student group creative productions, pitched campaign storyboards, and executed commercial photography shoots for client brands (Dukes, Rampook, and Ausaff) using professional Sony equipment and Lightroom workflows.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects & Portfolio Works Section -->
+        <section id="projects" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-tactical-border pb-3 gap-2">
+                <h2 class="text-xs font-bold text-tactical-accent tracking-widest">[04 // FEATURED PROJECTS & WORK SHOWCASE]</h2>
+                <span class="text-xs text-tactical-dim">CLICK CARD TO LAUNCH MEDIA PREVIEW</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Project 1: Video Production -->
+                <div onclick="openProjectModal('video')" class="hud-box p-6 cursor-pointer group hover:border-tactical-accent transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="h-48 bg-black border border-tactical-border mb-4 relative overflow-hidden rounded">
+                            <img src="https://img.youtube.com/vi/wvcLMuMh1js/maxresdefault.jpg" alt="TAKBIR YANG SUNYI" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute top-2 left-2 bg-[#101216]/90 px-2.5 py-1 text-xs text-tactical-accent border border-tactical-border tracking-wider">
+                                [YOUTUBE / VIDEO PRODUCTION]
+                            </div>
+                        </div>
+                        <h3 class="text-base font-bold text-white group-hover:text-tactical-accent transition-colors">Digital Video & Audio Production — "TAKBIR YANG SUNYI"</h3>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-1.5">Toyol Hitam Studio (DCRM 4) • CMT 2043 Module Production.</p>
+                    </div>
+                    <div class="mt-8 pt-3 border-t border-tactical-border flex items-center justify-between text-xs text-tactical-dim">
+                        <span>Adobe Premiere Pro / Audition</span>
+                        <span class="text-tactical-accent font-bold">WATCH VIDEO &rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Project 2: Photography Samples -->
+                <div onclick="openProjectModal('photography')" class="hud-box p-6 cursor-pointer group hover:border-tactical-accent transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="h-48 bg-black border border-tactical-border mb-4 relative overflow-hidden rounded">
+                            <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800" alt="Photography Samples" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute top-2 left-2 bg-[#101216]/90 px-2.5 py-1 text-xs text-tactical-accent border border-tactical-border tracking-wider">
+                                [ADOBE LIGHTROOM ALBUMS]
+                            </div>
+                        </div>
+                        <h3 class="text-base font-bold text-white group-hover:text-tactical-accent transition-colors">Photography Samples — Shuttermacht™</h3>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-1.5">Commercial shoots and Lightroom galleries for Dukes, Rampook, and Ausaff.</p>
+                    </div>
+                    <div class="mt-8 pt-3 border-t border-tactical-border flex items-center justify-between text-xs text-tactical-dim">
+                        <span>Sony A7 Mark III / Lightroom</span>
+                        <span class="text-tactical-accent font-bold">VIEW ALBUMS &rarr;</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section (With padded spacious button boxes) -->
+        <section id="contact" class="hud-box p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+            <div class="space-y-2">
+                <span class="text-xs text-tactical-accent tracking-widest">[05 // GET IN TOUCH]</span>
+                <h3 class="text-2xl font-bold text-white tracking-wide">Let's Connect For Your Team</h3>
+                <p class="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed">
+                    Currently seeking internship opportunities in creative media, video post-production, or digital design roles. Reach out via email, phone, or social links below.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4">
+                <!-- Spacious padded contact cards -->
+                <a href="https://mail.google.com/mail/?view=cm&to=buckyarinson@gmail.com" target="_blank" class="px-5 py-3.5 bg-tactical-panel border border-tactical-border hover:border-tactical-accent text-xs sm:text-sm text-slate-300 hover:text-white transition-colors flex items-center gap-3">
+                    <i class="fa-solid fa-envelope text-tactical-accent text-base"></i>
+                    <span>buckyarinson@gmail.com</span>
+                </a>
+                
+                <a href="tel:+60139296629" class="px-5 py-3.5 bg-tactical-panel border border-tactical-border hover:border-tactical-accent text-xs sm:text-sm text-slate-300 hover:text-white transition-colors flex items-center gap-3">
+                    <i class="fa-solid fa-phone text-tactical-accent text-base"></i>
+                    <span>+60 13-929 6629</span>
+                </a>
+
+                <a href="https://instagram.com" target="_blank" class="px-5 py-3.5 bg-tactical-panel border border-tactical-border hover:border-tactical-accent text-xs sm:text-sm text-slate-300 hover:text-white transition-colors flex items-center gap-3">
+                    <i class="fa-brands fa-instagram text-tactical-accent text-base"></i>
+                    <span>Instagram</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-tactical-border py-6 text-center text-xs text-tactical-dim relative z-10 bg-[#14171f]/80">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>© 2026 MUHAMMAD BAKHTIAR BIN MOHD ZAMRIN. ALL RIGHTS RESERVED.</span>
+            <span class="text-tactical-accent">DIPLOMA IN CREATIVE MULTIMEDIA • GERMAN-MALAYSIAN INSTITUTE</span>
+        </div>
+    </footer>
+
+
+    <!-- Transcript Modal Window -->
+    <div id="tactical-modal" class="modal-backdrop fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="modal-container hud-box bg-tactical-panel w-full max-w-2xl rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="px-5 py-3.5 border-b border-tactical-border flex items-center justify-between bg-[#101216]">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 bg-tactical-accent rounded-full"></span>
+                    <span id="modal-title-header" class="text-xs font-bold text-white tracking-widest uppercase">TRANSCRIPT RECORD</span>
+                </div>
+                <button onclick="closeModal()" class="w-7 h-7 bg-tactical-panel border border-tactical-border text-slate-400 hover:text-white hover:border-tactical-accent flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+
+            <div id="modal-body-content" class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-300">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <div class="px-5 py-3 border-t border-tactical-border bg-[#101216] flex justify-between items-center text-xs text-tactical-dim">
+                <span>GERMAN-MALAYSIAN INSTITUTE ACADEMIC VERIFICATION</span>
+                <button onclick="closeModal()" class="px-4 py-1.5 bg-tactical-accent text-black font-bold hover:bg-tactical-accentHover transition-colors">
+                    CLOSE WINDOW
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Full Photo View Modal -->
+    <div id="photo-modal" class="modal-backdrop fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="modal-container hud-box bg-tactical-panel w-full max-w-md rounded-lg shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-5 py-3.5 border-b border-tactical-border flex items-center justify-between bg-[#101216]">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 bg-tactical-accent rounded-full"></span>
+                    <span class="text-xs font-bold text-white tracking-widest uppercase">OPERATIVE ID: CRM24070564</span>
+                </div>
+                <button onclick="closePhotoModal()" class="w-7 h-7 bg-tactical-panel border border-tactical-border text-slate-400 hover:text-white hover:border-tactical-accent flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+            <div class="p-4 bg-[#101216]/50 flex items-center justify-center">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000" alt="Muhammad Bakhtiar Full View" class="max-h-[75vh] w-auto object-contain border border-tactical-border">
+            </div>
+            <div class="px-5 py-3 border-t border-tactical-border bg-[#101216] flex justify-between items-center text-xs text-tactical-dim">
+                <span>MUHAMMAD BAKHTIAR BIN MOHD ZAMRIN</span>
+                <button onclick="closePhotoModal()" class="px-4 py-1.5 bg-tactical-accent text-black font-bold hover:bg-tactical-accentHover transition-colors">
+                    CLOSE
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JavaScript Controllers -->
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        function openPhotoModal() {
+            document.getElementById('photo-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePhotoModal() {
+            document.getElementById('photo-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('photo-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'photo-modal') closePhotoModal();
+        });
+
+        const dossierData = {
+            spm: {
+                title: 'SPM Results Record',
+                html: `
+                    <div class="space-y-4">
+                        <div class="p-3.5 bg-[#101216] border border-tactical-border flex justify-between items-center text-xs sm:text-sm">
+                            <span class="text-white font-bold">SIJIL PELAJARAN MALAYSIA (SPM)</span>
+                            <span class="text-emerald-400 font-bold">STATUS: COMPLETED</span>
+                        </div>
+                        <div class="space-y-1.5 text-xs sm:text-sm">
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>Bahasa Melayu</span><span class="text-white font-bold">B</span></div>
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>English</span><span class="text-white font-bold">A-</span></div>
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>Pendidikan Islam</span><span class="text-white font-bold">C+</span></div>
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>Sejarah</span><span class="text-white font-bold">B</span></div>
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>Matematik</span><span class="text-white font-bold">A-</span></div>
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>Sains</span><span class="text-white font-bold">B</span></div>
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>Matematik Tambahan</span><span class="text-white font-bold">G</span></div>
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>Prinsip Perakaunan</span><span class="text-white font-bold">D</span></div>
+                            <div class="flex justify-between p-2.5 bg-[#101216] border border-tactical-border"><span>Ekonomi</span><span class="text-white font-bold">E</span></div>
+                        </div>
+                    </div>
+                `
+            },
+            cgpa: {
+                title: 'Diploma CGPA & Semester Subjects (Sem 1 - 4)',
+                html: `
+                    <div class="space-y-4">
+                        <div class="p-3.5 bg-[#101216] border border-tactical-border flex justify-between items-center text-xs sm:text-sm">
+                            <span class="text-white font-bold">CUMULATIVE CGPA: 3.33 / 4.00</span>
+                            <span class="text-tactical-accent">GERMAN-MALAYSIAN INSTITUTE</span>
+                        </div>
+
+                        <!-- Semester 1 -->
+                        <div class="p-3.5 bg-[#101216] border border-tactical-border space-y-1.5">
+                            <div class="text-tactical-accent font-bold text-xs pb-1 border-b border-tactical-border flex justify-between">
+                                <span>SEMESTER 1 (JULY 2024)</span>
+                                <span>GPA: 3.17 | CGPA: 3.17</span>
+                            </div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CMT 2093 Multimedia In Concept</span><span class="text-white font-semibold">A (4.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>MPU 2222 Effective Communication Skills</span><span class="text-white font-semibold">A (4.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CIT 0612 Computer Ethics & Values</span><span class="text-white font-semibold">B+ (3.33)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>GEL 2312 German Language 1</span><span class="text-white font-semibold">B+ (3.33)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CRM 1913 Storyboard Visualization</span><span class="text-white font-semibold">B (3.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>DST 1132 Creativity & Innovation</span><span class="text-white font-semibold">B (3.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CRM 1983 Sketching & Drawing</span><span class="text-white font-semibold">B- (2.67)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CIT 0513 Computer & Programming</span><span class="text-white font-semibold">C+ (2.33)</span></div>
+                        </div>
+
+                        <!-- Semester 2 -->
+                        <div class="p-3.5 bg-[#101216] border border-tactical-border space-y-1.5">
+                            <div class="text-tactical-accent font-bold text-xs pb-1 border-b border-tactical-border flex justify-between">
+                                <span>SEMESTER 2 (JANUARY 2025)</span>
+                                <span>GPA: 3.17 | CGPA: 3.17</span>
+                            </div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CMT 2013 Graphic Design & Composition</span><span class="text-white font-semibold">A- (3.67)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CMT 2033 Digital Imaging</span><span class="text-white font-semibold">A- (3.67)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>ESP 2062 English for Professional Purposes 1</span><span class="text-white font-semibold">A- (3.67)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CMT 2102 AI in Multimedia Technologies</span><span class="text-white font-semibold">B+ (3.33)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CRM 1933 Multimedia Instructional Design</span><span class="text-white font-semibold">B+ (3.33)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>GEL 2322 German Language 2</span><span class="text-white font-semibold">C (2.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CRM 1923 Multimedia OOP</span><span class="text-white font-semibold">C+ (2.33)</span></div>
+                        </div>
+
+                        <!-- Semester 3 -->
+                        <div class="p-3.5 bg-[#101216] border border-tactical-border space-y-1.5">
+                            <div class="text-tactical-accent font-bold text-xs pb-1 border-b border-tactical-border flex justify-between">
+                                <span>SEMESTER 3 (JULY 2025)</span>
+                                <span>GPA: 3.68 | CGPA: 3.34</span>
+                            </div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>MPU 2183 Penghayatan Etika Dan Peradaban</span><span class="text-white font-semibold">A (4.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>MPU 2342 Kursus Integriti dan Antirasuah</span><span class="text-white font-semibold">A (4.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CRM 1942 Web Programming with HTML</span><span class="text-white font-semibold">A (4.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>ESP 2072 English for Professional Purposes 2</span><span class="text-white font-semibold">A- (3.67)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>MPU 2422 Community Service</span><span class="text-white font-semibold">A- (3.67)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CIT 0573 Database Management System</span><span class="text-white font-semibold">A- (3.67)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CMT 2023 2D Animation</span><span class="text-white font-semibold">B+ (3.33)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CRM 1993 Multimedia Authoring</span><span class="text-white font-semibold">B+ (3.33)</span></div>
+                        </div>
+
+                        <!-- Semester 4 -->
+                        <div class="p-3.5 bg-[#101216] border border-tactical-border space-y-1.5">
+                            <div class="text-tactical-accent font-bold text-xs pb-1 border-b border-tactical-border flex justify-between">
+                                <span>SEMESTER 4 (JANUARY 2026)</span>
+                                <span>GPA: 3.29 | CGPA: 3.33</span>
+                            </div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>IMT 2442 Digital Entrepreneurship</span><span class="text-white font-semibold">A (4.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CMT 2043 Digital Video & Audio</span><span class="text-white font-semibold">A (4.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>IEP 0722CRM CRM Project Proposal</span><span class="text-white font-semibold">B (3.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CMT 2114 3D Animation</span><span class="text-white font-semibold">B (3.00)</span></div>
+                            <div class="flex justify-between text-xs sm:text-sm"><span>CRM 1953 Human Computer Interaction</span><span class="text-white font-semibold">B- (2.67)</span></div>
+                        </div>
+                    </div>
+                `
+            },
+            muet: {
+                title: 'MUET Assessment Record',
+                html: `
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#101216] border border-tactical-border flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-tactical-dim block">AGGREGATE SCORE</span>
+                                <span class="text-xl font-bold text-white">258 / 360</span>
+                            </div>
+                            <!-- Lit green color applied ONLY inside the modal tab view -->
+                            <span class="px-3.5 py-1.5 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 font-bold text-sm sm:text-base">
+                                BAND 4.5
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs sm:text-sm">
+                            <div class="p-3 bg-[#101216] border border-tactical-border"><span>LISTENING:</span> <b class="text-white">75 / 90</b></div>
+                            <div class="p-3 bg-[#101216] border border-tactical-border"><span>READING:</span> <b class="text-white">81 / 90</b></div>
+                            <div class="p-3 bg-[#101216] border border-tactical-border"><span>WRITING:</span> <b class="text-white">55 / 90</b></div>
+                            <div class="p-3 bg-[#101216] border border-tactical-border"><span>SPEAKING:</span> <b class="text-white">47 / 90</b></div>
+                        </div>
+                    </div>
+                `
+            },
+            video: {
+                title: 'Project: TAKBIR YANG SUNYI',
+                html: `
+                    <div class="space-y-4">
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            End-to-end digital video and audio production project by Toyol Hitam Studio (DCRM 4) for module CMT 2043, featuring professional narrative editing and sound design.
+                        </p>
+                        
+                        <a href="https://youtu.be/wvcLMuMh1js?si=MZfO-vsOORNyCzbA" target="_blank" class="block relative aspect-video bg-black border border-tactical-border group overflow-hidden rounded">
+                            <img src="https://img.youtube.com/vi/wvcLMuMh1js/maxresdefault.jpg" alt="Video Thumbnail" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all">
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/40">
+                                <div class="px-4 py-2 bg-tactical-accent text-black font-bold text-xs sm:text-sm flex items-center gap-2">
+                                    <i class="fa-brands fa-youtube text-base"></i> WATCH ON YOUTUBE
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="flex justify-between text-xs pt-2 border-t border-tactical-border text-tactical-dim">
+                            <span>SOFTWARE: PREMIERE PRO / AUDITION</span>
+                            <a href="https://youtu.be/wvcLMuMh1js?si=MZfO-vsOORNyCzbA" target="_blank" class="text-tactical-accent hover:underline">OPEN YOUTUBE LINK &rarr;</a>
+                        </div>
+                    </div>
+                `
+            },
+            photography: {
+                title: 'Photography Samples — Shuttermacht™',
+                html: `
+                    <div class="space-y-4">
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Professional freelance commercial photography captured using a <b class="text-white">Sony A7 Mark III</b> and edited in <b class="text-white">Adobe Lightroom</b>. Explore the client work albums below:
+                        </p>
+
+                        <div class="space-y-2.5">
+                            <a href="https://adobe.ly/4oEqlUa" target="_blank" class="flex items-center justify-between p-3.5 bg-[#101216] border border-tactical-border hover:border-tactical-accent transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-images text-tactical-accent"></i>
+                                    <div>
+                                        <h5 class="text-xs sm:text-sm font-bold text-white group-hover:text-tactical-accent">Dukes</h5>
+                                        <p class="text-xs text-tactical-dim">Adobe Lightroom Album 1</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-tactical-dim group-hover:text-white"></i>
+                            </a>
+
+                            <a href="https://adobe.ly/4yi4eq1" target="_blank" class="flex items-center justify-between p-3.5 bg-[#101216] border border-tactical-border hover:border-tactical-accent transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-images text-tactical-accent"></i>
+                                    <div>
+                                        <h5 class="text-xs sm:text-sm font-bold text-white group-hover:text-tactical-accent">Rampook</h5>
+                                        <p class="text-xs text-tactical-dim">Adobe Lightroom Album 2 (Local clothing brand)</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-tactical-dim group-hover:text-white"></i>
+                            </a>
+
+                            <a href="https://adobe.ly/47T9R2V" target="_blank" class="flex items-center justify-between p-3.5 bg-[#101216] border border-tactical-border hover:border-tactical-accent transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-images text-tactical-accent"></i>
+                                    <div>
+                                        <h5 class="text-xs sm:text-sm font-bold text-white group-hover:text-tactical-accent">Ausaff</h5>
+                                        <p class="text-xs text-tactical-dim">Adobe Lightroom Album 3 (Custom shirt printing)</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-tactical-dim group-hover:text-white"></i>
+                            </a>
+                        </div>
+
+                        <div class="flex justify-between text-xs pt-3 border-t border-tactical-border text-tactical-dim">
+                            <span>CAMERA: SONY A7 MARK III</span>
+                            <span>STATUS: ACTIVE</span>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function openModal(key) {
+            const data = dossierData[key];
+            if (!data) return;
+            document.getElementById('modal-title-header').textContent = data.title;
+            document.getElementById('modal-body-content').innerHTML = data.html;
+            document.getElementById('tactical-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openProjectModal(key) {
+            openModal(key);
+        }
+
+        function closeModal() {
+            document.getElementById('tactical-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('tactical-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'tactical-modal') closeModal();
+        });
+    </script>
+</body>
+</html>
